@@ -60,17 +60,34 @@ class ProjectHelper:
             wd = self.app.wd
             self.go_to_project_page()
             self.project_cache = []
-            for element in (wd.find_elements_by_css_selector("tr.row-1 a") or
-                            wd.find_elements_by_css_selector("tr.row-2 a")):
+            for element in wd.find_elements_by_css_selector("tr.row-1 a, tr.row-2 a"):
                 text = element.text
-                print(text)
-                wd.find_element_by_link_text("text").click()
-                id = element.find_element_by_name("project_id").get_attribute("value")
-                self.project_cache.append(Project(name=text, id=id))
+                self.project_cache.append(Project(name=text))
         return list(self.project_cache)
 
     def count(self):
         wd = self.app.wd
         self.go_to_project_page()
-        return (len(wd.find_elements_by_css_selector("tr.row-1 a")) +
-                len(wd.find_elements_by_css_selector("tr.row-2 a")))
+        return len(wd.find_elements_by_css_selector("tr.row-1 a, tr.row-2 a"))
+
+
+    def delete_project_by_index(self, index):
+        wd = self.app.wd
+        # self.go_to_project_page()
+        self.select_project_by_index(index)
+        time.sleep(2)
+        wd.find_element_by_css_selector("input[value='Delete Project']").click()
+        time.sleep(2)
+        wd.find_element_by_css_selector("input[value='Delete Project']").click()
+        time.sleep(2)
+        self.go_to_project_page()
+        self.group_cache = None
+
+    def select_project_by_index(self, index):
+            wd = self.app.wd
+            self.go_to_project_page()
+            wd.find_elements_by_css_selector("tr.row-1 a, tr.row-2 a")[index].click()
+
+
+
+

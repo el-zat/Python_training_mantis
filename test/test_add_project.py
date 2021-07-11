@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from model.project import Project
+from data.project_testdata import testdata
+import pytest
 
 
-def test_test(app):
-
+@pytest.mark.parametrize("project", testdata, ids=[repr(x) for x in testdata])
+def test_test(app, project):
     old_projects = app.project_helper.get_project_list()
-    project = Project(name="New project", description="This is a test project")
     app.project_helper.create_project(project)
     new_projects = app.project_helper.get_project_list()
-    assert len(old_projects) + 1 == app.group_helper.count()
+    assert len(old_projects) + 1 == app.project_helper.count()
     old_projects.append(project)
-    # assert sorted(new_projects, key=Project.id_or_max) == sorted(app.project_helper.get_project_list(), key=Project.id_or_max)
+    assert sorted(new_projects, key=Project.id_or_max) == sorted(app.project_helper.get_project_list(),
+                                                                 key=Project.id_or_max)
 
