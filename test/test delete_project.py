@@ -3,6 +3,7 @@ from random import randrange
 
 
 def test_delete_some_project(app):
+    app.session.login("administrator", "root")
     if app.project_helper.count() == 0:
         app.project_helper.create_project(Project(name="Testproject"))
     old_projects = app.project_helper.get_project_list()
