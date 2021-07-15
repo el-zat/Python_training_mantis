@@ -19,13 +19,18 @@ def load_config(file):
     return target
 
 
+@pytest.fixture(scope="session")
+def config(request):
+    return load_config(request.config.getoption("--target"))
+
+
 @pytest.fixture
 def app(request, config):
     global fixture
     browser = request.config.getoption("--browser")
     if fixture is None or not fixture.is_valid():
-        fixture = Application(browser=browser, base_url=config['web']['baseUrl'])
-    fixture.session.login(username=config['webadmin']['username'], password=config['webadmin']['password'])
+        fixture = Application(browser=browser, config=config)
+    # fixture.session.login(username=config['webadmin']['username'], password=config['webadmin']['password'])
     return fixture
 
 
@@ -57,7 +62,7 @@ def restore_server_configuration(host, username, password):
 @pytest.fixture(scope="session", autouse=True)
 def stop(request):
     def fin():
-        fixture.session.logout()
+        fixture.session.ensure_logout()
         fixture.destroy()
     request.addfinalizer(fin)
     return fixture
@@ -68,9 +73,7 @@ def pytest_addoption(parser):
     parser.addoption("--target", action="store", default="target.json")
 
 
-@pytest.fixture(scope="session")
-def config(request):
-    return load_config(request.config.getoption("--target"))
+
 
 
 
