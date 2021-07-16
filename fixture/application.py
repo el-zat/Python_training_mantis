@@ -25,7 +25,7 @@ class Application:
         self.config = config
         self.signup = SignupHelper(self)
         self.mail = MailHelper(self)
-        self.soap = SoapHelper
+        self.soap = SoapHelper(self)
 
 
     def is_valid(self):
