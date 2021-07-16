@@ -3,8 +3,6 @@ from model.project import Project
 import time
 
 
-
-
 class ProjectHelper:
     def __init__(self, app):
         self.app = app
@@ -65,11 +63,11 @@ class ProjectHelper:
                 self.project_cache.append(Project(name=text))
         return list(self.project_cache)
 
+
     def count(self):
         wd = self.app.wd
         self.go_to_project_page()
         return len(wd.find_elements_by_css_selector("tr.row-1 a, tr.row-2 a"))
-
 
     def delete_project_by_index(self, index):
         wd = self.app.wd

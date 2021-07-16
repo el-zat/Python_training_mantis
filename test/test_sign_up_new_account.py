@@ -1,6 +1,5 @@
 import string
 import random
-import time
 
 
 def random_username(prefix, maxlen):
@@ -16,7 +15,3 @@ def test_sign_up_new_account(app):
     app.signup.new_user(username, email, password)
     app.session.ensure_logout()
     assert app.soap.can_login(username, password)
-    # app.session.login(username, password)
-    # assert app.session.is_logged_in_as(username)
-
-
